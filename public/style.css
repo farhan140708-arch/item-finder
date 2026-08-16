@@ -123,6 +123,10 @@ form {
   margin-top: 44px;
 }
 
+.results.single-col {
+  grid-template-columns: 1fr;
+}
+
 .results h2 {
   font-family: Georgia, "Times New Roman", serif;
   font-size: 18px;
