@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Findable — search anything, near you or online</title>
+<link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <header class="topbar">
+    <span class="wordmark">Findable</span>
+  </header>
+
+  <main class="page">
+    <section class="search-panel">
+      <h1>What are you looking for?</h1>
+      <p class="sub">Type anything — we'll check online stores and shops near you.</p>
+
+      <form id="search-form">
+        <input id="item" type="text" placeholder="e.g. leather desk chair, vintage camera, rose bouquet" required />
+        <div class="row">
+          <div class="field">
+            <label for="budget">Budget up to</label>
+            <div class="budget-input">
+              <select id="currency">
+                <option>USD</option>
+                <option>AED</option>
+                <option>GBP</option>
+                <option>EUR</option>
+                <option>INR</option>
+              </select>
+              <input id="budget" type="number" min="0" placeholder="500" />
+            </div>
+          </div>
+          <div class="field grow">
+            <label for="location">Your town</label>
+            <input id="location" type="text" placeholder="e.g. Dubai" required />
+          </div>
+        </div>
+        <button type="submit" id="search-btn">Search</button>
+      </form>
+      <p id="status" class="status"></p>
+    </section>
+
+    <section id="results" class="results" hidden>
+      <div class="results-col">
+        <h2>Online</h2>
+        <div id="online-list" class="list"></div>
+      </div>
+      <div class="results-col">
+        <h2>Near you</h2>
+        <div id="nearby-list" class="list"></div>
+      </div>
+    </section>
+  </main>
+
+  <script src="app.js"></script>
+</body>
+</html>
