@@ -37,6 +37,10 @@ function renderOnline(online) {
 
 function renderNearby(nearby) {
   nearbyList.innerHTML = '';
+if (nearby.disabled) {
+    nearbyList.innerHTML = '<p class="empty">Nearby search isn\'t set up yet.</p>';
+    return;
+  }
   if (nearby.error) {
     nearbyList.innerHTML = `<p class="empty">Nearby search unavailable: ${esc(nearby.error)}</p>`;
     return;
