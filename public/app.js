@@ -4,6 +4,7 @@ const btn = document.getElementById('search-btn');
 const resultsEl = document.getElementById('results');
 const onlineList = document.getElementById('online-list');
 const nearbyList = document.getElementById('nearby-list');
+const nearbyCol = document.getElementById('nearby-col');
 
 function esc(s) {
   const d = document.createElement('div');
@@ -37,18 +38,15 @@ function renderOnline(online) {
 
 function renderNearby(nearby) {
   nearbyList.innerHTML = '';
-if (nearby.disabled) {
-    nearbyList.innerHTML = '<p class="empty">Nearby search isn\'t set up yet.</p>';
+  // Hide the whole column unless we actually have in-person places to show —
+  // no placeholder text for "disabled" or "no results", just skip it.
+  if (nearby.disabled || nearby.error || !nearby.results.length) {
+    nearbyCol.hidden = true;
+    resultsEl.classList.add('single-col');
     return;
   }
-  if (nearby.error) {
-    nearbyList.innerHTML = `<p class="empty">Nearby search unavailable: ${esc(nearby.error)}</p>`;
-    return;
-  }
-  if (!nearby.results.length) {
-    nearbyList.innerHTML = '<p class="empty">No nearby shops found for this category.</p>';
-    return;
-  }
+  nearbyCol.hidden = false;
+  resultsEl.classList.remove('single-col');
   nearby.results.forEach((r) => {
     const mapsLink = r.lat && r.lng
       ? `https://www.google.com/maps/search/?api=1&query=${r.lat},${r.lng}`
