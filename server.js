@@ -10,7 +10,7 @@ app.use(express.json());
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.post('/api/search', async (req, res) => {
-  const { item, budget, currency = 'USD', location } = req.body || {};
+  const { item, budget, currency = 'USD', location, gender = '' } = req.body || {};
 
   if (!item || typeof item !== 'string' || !item.trim()) {
     return res.status(400).json({ error: 'item is required' });
@@ -20,7 +20,7 @@ app.post('/api/search', async (req, res) => {
   }
 
   try {
-    const result = await runSearch({ item: item.trim(), budget, currency, location: location.trim() });
+    const result = await runSearch({ item: item.trim(), budget, currency, location: location.trim(), gender });
     res.json(result);
   } catch (err) {
     res.status(500).json({ error: err.message });
