@@ -12,6 +12,13 @@ function esc(s) {
   return d.innerHTML;
 }
 
+function tierLabel(r) {
+  if (r.aboveBudget) return '<span class="badge badge-stretch">Worth stretching for</span>';
+  if (r.tier === 'premium') return '<span class="badge badge-premium">Premium pick</span>';
+  if (r.tier === 'everyday') return '<span class="badge badge-everyday">Everyday pick</span>';
+  return '';
+}
+
 function renderOnline(online) {
   onlineList.innerHTML = '';
   if (online.error) {
@@ -26,7 +33,7 @@ function renderOnline(online) {
     const card = document.createElement('div');
     card.className = 'card';
     card.innerHTML = `
-      <p class="card-title">${esc(r.title)}</p>
+      <p class="card-title">${esc(r.title)} ${tierLabel(r)}</p>
       <p class="card-meta">${esc(r.source || '')}</p>
       <p class="card-price">${esc(online.currency)} ${r.price.toLocaleString()}</p>
       <div class="card-links">
@@ -38,7 +45,7 @@ function renderOnline(online) {
 
 function renderNearby(nearby) {
   nearbyList.innerHTML = '';
-  // Hide the whole column unless we actually have in-person places to show —
+  // Hide the whole column unless we actually have in-person places to show -
   // no placeholder text for "disabled" or "no results", just skip it.
   if (nearby.disabled || nearby.error || !nearby.results.length) {
     nearbyCol.hidden = true;
@@ -55,11 +62,11 @@ function renderNearby(nearby) {
     card.className = 'card';
     card.innerHTML = `
       <p class="card-title">${esc(r.name)}</p>
-      <p class="card-meta">${esc(r.address || '')}${r.rating ? ' &middot; ' + r.rating + ' rating' : ''}${r.openNow === true ? ' &middot; open now' : r.openNow === false ? ' &middot; closed now' : ''}</p>
+      <p class="card-meta">${esc(r.address || '')}${r.rating ? ' &middot; ' + r.rating + ' rating' : ''}${r.hours ? ' &middot; ' + esc(r.hours) : ''}</p>
       <div class="card-links">
         ${r.phone ? `<a href="tel:${esc(r.phone)}">${esc(r.phone)}</a>` : ''}
         ${r.website ? `<a href="${esc(r.website)}" target="_blank" rel="noopener">Shop website</a>` : ''}
-        <a href="${esc(mapsLink)}" target="_blank" rel="noopener">Map</a>
+        ${mapsLink ? `<a href="${esc(mapsLink)}" target="_blank" rel="noopener">Map</a>` : ''}
       </div>`;
     nearbyList.appendChild(card);
   });
@@ -71,6 +78,7 @@ form.addEventListener('submit', async (e) => {
   const item = document.getElementById('item').value.trim();
   const budget = document.getElementById('budget').value;
   const currency = document.getElementById('currency').value;
+  const gender = document.getElementById('gender').value;
   const location = document.getElementById('location').value.trim();
 
   if (!item) {
@@ -93,7 +101,7 @@ form.addEventListener('submit', async (e) => {
     const res = await fetch('/api/search', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ item, budget: budget || null, currency, location }),
+      body: JSON.stringify({ item, budget: budget || null, currency, location, gender }),
     });
     const data = await res.json();
 
