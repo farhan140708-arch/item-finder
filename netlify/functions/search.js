@@ -12,7 +12,7 @@ exports.handler = async (event) => {
     return { statusCode: 400, body: JSON.stringify({ error: 'Invalid JSON body' }) };
   }
 
-  const { item, budget, currency = 'USD', location } = body;
+  const { item, budget, currency = 'USD', location, gender = '' } = body;
 
   if (!item || typeof item !== 'string' || !item.trim()) {
     return { statusCode: 400, body: JSON.stringify({ error: 'item is required' }) };
@@ -22,7 +22,7 @@ exports.handler = async (event) => {
   }
 
   try {
-    const result = await runSearch({ item: item.trim(), budget, currency, location: location.trim() });
+    const result = await runSearch({ item: item.trim(), budget, currency, location: location.trim(), gender });
     return { statusCode: 200, headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(result) };
   } catch (err) {
     return { statusCode: 500, body: JSON.stringify({ error: err.message }) };
